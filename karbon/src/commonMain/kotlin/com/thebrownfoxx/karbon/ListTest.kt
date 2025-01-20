@@ -1,6 +1,6 @@
 package com.thebrownfoxx.karbon
 
-fun main() {
+private fun main() {
     markdown {
         ol(startingIndex = 5) {
             repeat(100) {

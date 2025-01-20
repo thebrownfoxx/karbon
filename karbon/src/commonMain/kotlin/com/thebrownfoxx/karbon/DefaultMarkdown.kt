@@ -1,8 +1,8 @@
 package com.thebrownfoxx.karbon
 
-class DefaultMarkdown : Markdown {
+public class DefaultMarkdown : Markdown {
     private val stringBuilder = StringBuilder()
-    override val value get() = stringBuilder.toString()
+    public override val value: String get() = stringBuilder.toString()
 
     override fun markdown(content: () -> String) {
         stringBuilder.appendLine(content())

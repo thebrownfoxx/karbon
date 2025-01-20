@@ -9,6 +9,8 @@ group = "com.thebrownfoxx"
 version = "0.1.0-alpha01"
 
 kotlin {
+    explicitApi()
+
     jvm()
     iosX64()
     iosArm64()
