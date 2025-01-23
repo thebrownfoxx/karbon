@@ -1,5 +1,7 @@
 @file:Suppress("UnstableApiUsage")
 
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+
 pluginManagement {
     repositories {
         google()
@@ -17,3 +19,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "karbon-dsl"
 include(":karbon")
+include(":docs")

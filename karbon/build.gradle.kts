@@ -9,7 +9,7 @@ plugins {
 }
 
 group = "com.thebrownfoxx"
-version = "0.3.2"
+version = properties["version"]!!
 
 kotlin {
     explicitApi()
@@ -36,13 +36,9 @@ kotlin {
     }
 
     sourceSets {
-        val commonMain by getting {
-            dependencies {}
-        }
-        val commonTest by getting {
-            dependencies {
-                implementation(libs.kotlin.test)
-            }
+        commonMain.dependencies {}
+        commonTest.dependencies {
+            implementation(libs.kotlin.test)
         }
     }
 }

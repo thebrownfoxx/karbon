@@ -12,7 +12,7 @@ public interface Markdown {
     public fun italic(content: Markdown.() -> Unit)
     public fun block(content: Markdown.() -> Unit)
     public fun image(uri: String, altText: String)
-    public fun code(language: String = "", content: Markdown.() -> Unit)
+    public fun code(language: String = "", content: String)
     public fun horizontalRule()
 
     public fun unorderedList(content: MarkdownList.() -> Unit)
@@ -35,7 +35,7 @@ public interface Markdown {
     public fun link(uri: String, text: String): Unit = link(uri) { text(text) }
     public fun bold(text: String): Unit = bold { text(text) }
     public fun italic(text: String): Unit = italic { text(text) }
-    public fun code(language: String = "", text: String): Unit = code(language) { text(text) }
+    public fun code(language: String = "", content: () -> String): Unit = code(language, content())
 
     public fun ul(content: MarkdownList.() -> Unit): Unit = unorderedList(content)
     public fun ol(startingIndex: Int = 1, content: MarkdownList.() -> Unit): Unit =
@@ -43,8 +43,14 @@ public interface Markdown {
 }
 
 public fun markdown(
-    markdown: Markdown = DefaultMarkdown(),
     builder: Markdown.() -> Unit,
 ): Markdown {
+    return markdown(BasicMarkdown(), builder)
+}
+
+public fun <T : Markdown> markdown(
+    markdown: T,
+    builder: T.() -> Unit,
+): T {
     return markdown.apply(builder)
 }

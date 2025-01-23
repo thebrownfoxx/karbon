@@ -1,6 +1,6 @@
 package com.thebrownfoxx.karbon
 
-public class DefaultMarkdown : Markdown {
+public class BasicMarkdown : Markdown {
     private val stringBuilder = StringBuilder()
     public override val value: String get() = stringBuilder.toString()
 
@@ -47,14 +47,13 @@ public class DefaultMarkdown : Markdown {
         stringBuilder.append("![$altText]($uri)")
     }
 
-    override fun code(language: String, content: Markdown.() -> Unit) {
-        val contentValue = value(content)
-        if ("\n" !in contentValue && language == "")
-            stringBuilder.append("`$contentValue`")
+    override fun code(language: String, content: String) {
+        if ("\n" !in content && language == "")
+            stringBuilder.append("`$content`")
         else {
             stringBuilder.appendLine("```${language.singleLine()}")
-            stringBuilder.append(contentValue)
-            stringBuilder.append("```")
+            stringBuilder.appendLine(content)
+            stringBuilder.appendLine("```")
         }
     }
 
@@ -114,7 +113,7 @@ public class DefaultMarkdown : Markdown {
     }
 
     private fun value(function: Markdown.() -> Unit): String {
-        return DefaultMarkdown().apply(function).value
+        return BasicMarkdown().apply(function).value
     }
 
     private fun String.singleLine() = replace("\\\n", " ")
