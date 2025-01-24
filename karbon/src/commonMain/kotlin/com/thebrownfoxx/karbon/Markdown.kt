@@ -5,7 +5,7 @@ public interface Markdown {
 
     public fun markdown(content: () -> String)
     public fun text(value: String)
-    public fun line(content: Markdown.() -> Unit)
+    public fun paragraph(content: Markdown.() -> Unit)
     public fun header(level: HeaderLevel, content: Markdown.() -> Unit)
     public fun link(uri: String, content: Markdown.() -> Unit)
     public fun bold(content: Markdown.() -> Unit)
@@ -18,8 +18,23 @@ public interface Markdown {
     public fun unorderedList(content: MarkdownList.() -> Unit)
     public fun orderedList(startingIndex: Int = 1, content: MarkdownList.() -> Unit)
 
-    public fun line(text: String): Unit = line { text(text) }
-    public fun whitespace(): Unit = line {  }
+    public fun paragraph(text: String): Unit = paragraph { text(text) }
+    public fun p(content: Markdown.() -> Unit): Unit = paragraph(content)
+    public fun p(text: String): Unit = paragraph(text)
+
+    @Deprecated(
+        message = "Use paragraph instead",
+        replaceWith = ReplaceWith("paragraph(content)"),
+    )
+    public fun line(content: Markdown.() -> Unit): Unit = paragraph(content)
+
+    @Deprecated(
+        message = "Use paragraph instead",
+        replaceWith = ReplaceWith("paragraph(text)"),
+    )
+    public fun line(text: String): Unit = paragraph { text(text) }
+
+    public fun whitespace(): Unit = paragraph {  }
     public fun h1(content: Markdown.() -> Unit): Unit = header(1.headerLevel, content)
     public fun h2(content: Markdown.() -> Unit): Unit = header(2.headerLevel, content)
     public fun h3(content: Markdown.() -> Unit): Unit = header(3.headerLevel, content)

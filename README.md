@@ -8,7 +8,7 @@ This library is still early in development. Feedback can be submitted through [G
 Add it as a dependency to your project, hosted in [Maven Central](https://central.sonatype.com/artifact/com.thebrownfoxx/karbon).  
 ```kotlin
 dependencies {
-    implementation("com.thebrownfoxx:karbon:0.4.0")
+    implementation("com.thebrownfoxx:karbon:0.5.0")
 }
 ```
   
@@ -17,7 +17,7 @@ You can start writing your Karbon Markdown inside a `markdown` block.
 ```kotlin
 markdown {
     h1("Headline")
-    line {
+    p {
         text("The quick brown ")
         bold("foxx")
         text(" jumps over the ")
@@ -30,8 +30,8 @@ You can use all your standard Kotlin features to build your Markdown.
 ```kotlin
 val roll = (1..6).random()
 markdown {
-    line("You rolled a \$roll")
-    if (roll == 1) line("You won!")
+    p("You rolled a \$roll")
+    if (roll == 1) p("You won!")
 }
 ```
   
@@ -43,8 +43,8 @@ fun Markdown.header() {
 }
 
 fun Markdown.body() {
-    line("The quick brown foxx.")
-    line { link("https://example.com", "Link") }
+    p("The quick brown foxx.")
+    p { link("https://example.com", "Link") }
 }
 
 fun main() {

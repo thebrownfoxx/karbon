@@ -13,7 +13,7 @@ public class BasicMarkdown : Markdown {
         stringBuilder.append(trimmedText)
     }
 
-    override fun line(content: Markdown.() -> Unit) {
+    override fun paragraph(content: Markdown.() -> Unit) {
         stringBuilder.append("${value(content)}  \n")
     }
 

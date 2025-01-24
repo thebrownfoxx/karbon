@@ -16,13 +16,13 @@ fun generateReadme() {
 
 private fun Markdown.description() {
     h1("Karbon")
-    line("A Kotlin DSL for making composable Markdown documents.")
+    p("A Kotlin DSL for making composable Markdown documents.")
     whitespace()
 }
 
 private fun Markdown.feedback() {
     h2("Community")
-    line {
+    paragraph {
         text("This library is still early in development. Feedback can be submitted through ")
         link("https://github.com/thebrownfoxx/karbon/issues", "GitHub Issues")
         text(". Open-source contributions are very welcome, ")
@@ -41,7 +41,7 @@ private fun Markdown.usage() {
 }
 
 private fun Markdown.dependency() {
-    line {
+    paragraph {
         text("Add it as a dependency to your project, hosted in ")
         val mavenCentralUri = "https://central.sonatype.com/artifact/com.thebrownfoxx/karbon"
         link(mavenCentralUri, "Maven Central")
@@ -63,7 +63,7 @@ private fun Markdown.dependencyCode(version: String) {
 
 private fun Markdown.entryPoint() {
     h3("Entry Point")
-    line {
+    paragraph {
         text("You can start writing your Karbon Markdown inside a ")
         code { "markdown" }
         text(" block.")
@@ -76,7 +76,7 @@ private fun Markdown.entryPointCode() {
         """
             markdown {
                 h1("Headline")
-                line {
+                p {
                     text("The quick brown ")
                     bold("foxx")
                     text(" jumps over the ")
@@ -89,7 +89,7 @@ private fun Markdown.entryPointCode() {
 
 private fun Markdown.kotlinFeatures() {
     h3("Kotlin features")
-    line("You can use all your standard Kotlin features to build your Markdown.")
+    p("You can use all your standard Kotlin features to build your Markdown.")
     kotlinFeaturesCode()
     whitespace()
 }
@@ -99,8 +99,8 @@ private fun Markdown.kotlinFeaturesCode() {
         $$"""
             val roll = (1..6).random()
             markdown {
-                line("You rolled a \$roll")
-                if (roll == 1) line("You won!")
+                p("You rolled a \$roll")
+                if (roll == 1) p("You won!")
             }
         """.trimIndent()
     }
@@ -108,7 +108,7 @@ private fun Markdown.kotlinFeaturesCode() {
 
 private fun Markdown.composingMarkdown() {
     h3("Composing Markdown")
-    line {
+    paragraph {
         text("You can break Markdown into smaller composable functions via extension functions for the ")
         code { "Markdown" }
         text(" interface.")
@@ -123,12 +123,12 @@ private fun Markdown.composingMarkdownCode() {
             fun Markdown.header() {
                 h1("Karbon")
             }
-            
+
             fun Markdown.body() {
-                line("The quick brown foxx.")
-                line { link("https://example.com", "Link") }
+                p("The quick brown foxx.")
+                p { link("https://example.com", "Link") }
             }
-            
+
             fun main() {
                 markdown {
                     header()
@@ -141,7 +141,7 @@ private fun Markdown.composingMarkdownCode() {
 
 private fun Markdown.printingMarkdown() {
     h3("Printing Markdown")
-    line {
+    paragraph {
         text("You can print the Markdown you wrote with the print function, which accepts ")
         code { "MarkdownPrinter" }
         text("s. There are prebuilt printers included in this library including ")
@@ -153,7 +153,7 @@ private fun Markdown.printingMarkdown() {
         text(" interface to make your own.")
     }
     printingMarkdownCode()
-    line {
+    paragraph {
         text("Alternatively, you can access the ")
         code { "value" }
         text("property of a ")
