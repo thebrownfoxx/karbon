@@ -99,7 +99,7 @@ private fun Markdown.kotlinFeaturesCode() {
         $$"""
             val roll = (1..6).random()
             markdown {
-                p("You rolled a \$roll")
+                p("You rolled a $roll")
                 if (roll == 1) p("You won!")
             }
         """.trimIndent()
