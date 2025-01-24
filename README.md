@@ -30,7 +30,7 @@ You can use all your standard Kotlin features to build your Markdown.
 ```kotlin
 val roll = (1..6).random()
 markdown {
-    p("You rolled a \$roll")
+    p("You rolled a $roll")
     if (roll == 1) p("You won!")
 }
 ```
