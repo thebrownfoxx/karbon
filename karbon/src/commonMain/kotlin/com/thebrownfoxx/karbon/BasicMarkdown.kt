@@ -37,8 +37,8 @@ public class BasicMarkdown : Markdown {
 
     override fun block(content: Markdown.() -> Unit) {
         val contentValues = value(content).split("\n")
-        contentValues.forEach { contentValue ->
-            if (contentValue.isNotBlank()) stringBuilder.append("> ")
+        contentValues.forEachIndexed { index, contentValue ->
+            if (index != contentValues.lastIndex || contentValue.isNotBlank()) stringBuilder.append("> ")
             stringBuilder.appendLine(contentValue)
         }
     }

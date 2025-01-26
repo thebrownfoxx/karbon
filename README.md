@@ -8,7 +8,7 @@ This library is still early in development. Feedback can be submitted through [G
 Add it as a dependency to your project, hosted in [Maven Central](https://central.sonatype.com/artifact/com.thebrownfoxx/karbon).  
 ```kotlin
 dependencies {
-    implementation("com.thebrownfoxx:karbon:0.5.0")
+    implementation("com.thebrownfoxx:karbon:0.5.1")
 }
 ```
   
