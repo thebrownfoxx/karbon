@@ -19,9 +19,11 @@ public class CommonMarkRenderer(
             is StrikethroughNode -> render()
             is InlineCodeNode -> render()
             is ImageNode -> render()
+            is BlockNode -> render()
             is HeadingNode -> render()
             is BlockQuoteNode -> render()
             is BlockCodeNode -> render()
+            is WhitespaceNode -> render()
             is HorizontalRuleNode -> render()
             else -> error("Unsupported node $this")
         }
@@ -44,7 +46,7 @@ public class CommonMarkRenderer(
     }
 
     private fun LinkNode.render(): String {
-        return "[$renderedContent]($uri)"
+        return "[$renderedContent](${uri.value})"
     }
 
     private fun BoldNode.render(): String {
@@ -64,7 +66,11 @@ public class CommonMarkRenderer(
     }
 
     private fun ImageNode.render(): String {
-        return "![$altText]($uri)"
+        return "![$altText](${uri.value})"
+    }
+
+    private fun BlockNode.render(): String {
+        return renderedContent
     }
 
     private fun HeadingNode.render(): String {
@@ -80,11 +86,11 @@ public class CommonMarkRenderer(
 
     private fun BlockCodeNode.render(): String {
         val language = language?.name ?: ""
-        return """
-            ```$language
-            $content
-            ```
-        """.trimIndent()
+        return "```$language\n$content\n```"
+    }
+
+    private fun WhitespaceNode.render(): String {
+        return ""
     }
 
     private fun HorizontalRuleNode.render(): String {
@@ -92,7 +98,7 @@ public class CommonMarkRenderer(
     }
 
     private val InternalNode.renderedContent
-        get() = children.joinToString("\n") { it.render() }
+        get() = children.joinToString("") { it.render() }
 }
 
 public fun interface MarkdownInTextNodeStrategy {

@@ -1,52 +1,55 @@
 package com.thebrownfoxx.karbon14
 
-public class InlineMarkdownImpl: InlineMarkdown {
-    private val nodes = mutableListOf<InlineNode>()
-
-    override val children: List<InlineNode> = nodes.toList()
+public class InlineMarkdownImpl : InlineMarkdown {
+    private val _content = mutableListOf<InlineNode>()
+    public val content: List<InlineNode> get() = _content.toList()
 
     override fun text(value: String) {
-        nodes.add(TextNode(value))
+        _content.add(TextNode(value))
     }
 
     override fun lineBreak() {
-        nodes.add(LineBreakNode)
+        _content.add(LineBreakNode)
     }
 
     override fun paragraphBreak() {
-        nodes.add(ParagraphBreakNode)
+        _content.add(ParagraphBreakNode)
     }
 
-    override fun link(uri: String, content: InlineMarkdown.() -> Unit) {
-        nodes.add(LinkNode(uri, getContentChildren(content)))
+    override fun link(uri: Uri, content: InlineMarkdown.() -> Unit) {
+        _content.add(LinkNode(uri, getContentChildren(content)))
     }
 
     override fun bold(content: InlineMarkdown.() -> Unit) {
-        nodes.add(BoldNode(getContentChildren(content)))
+        _content.add(BoldNode(getContentChildren(content)))
     }
 
     override fun italic(content: InlineMarkdown.() -> Unit) {
-        nodes.add(ItalicNode(getContentChildren(content)))
+        _content.add(ItalicNode(getContentChildren(content)))
     }
 
     override fun strikethrough(content: InlineMarkdown.() -> Unit) {
-        nodes.add(StrikethroughNode(getContentChildren(content)))
+        _content.add(StrikethroughNode(getContentChildren(content)))
     }
 
     override fun inlineCode(content: String) {
-        nodes.add(InlineCodeNode(content))
+        _content.add(InlineCodeNode(content))
     }
 
-    override fun image(uri: String, altText: String) {
-        nodes.add(ImageNode(uri, altText))
+    override fun image(uri: Uri, altText: String) {
+        _content.add(ImageNode(uri, altText))
     }
 }
 
-public class MarkdownImpl : Markdown, InlineMarkdown by InlineMarkdownImpl() {
+public class MarkdownImpl : Markdown {
     private val nodes = mutableListOf<Node>()
 
     override val root: RootNode
         get() = RootNode(nodes)
+
+    override fun block(content: InlineMarkdown.() -> Unit) {
+        nodes.add(BlockNode(getContentChildren(content)))
+    }
 
     override fun heading(
         level: HeadingLevel,
@@ -66,8 +69,12 @@ public class MarkdownImpl : Markdown, InlineMarkdown by InlineMarkdownImpl() {
     override fun horizontalRule() {
         nodes.add(HorizontalRuleNode)
     }
+
+    override fun whitespace() {
+        nodes.add(WhitespaceNode)
+    }
 }
 
 private fun getContentChildren(content: InlineMarkdown.() -> Unit): List<InlineNode> {
-    return InlineMarkdownImpl().apply(content).children
+    return InlineMarkdownImpl().apply(content).content
 }

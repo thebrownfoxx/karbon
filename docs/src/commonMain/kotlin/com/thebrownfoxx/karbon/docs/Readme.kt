@@ -1,9 +1,12 @@
 package com.thebrownfoxx.karbon.docs
 
-import com.thebrownfoxx.karbon.FilePrinter
-import com.thebrownfoxx.karbon.Markdown
-import com.thebrownfoxx.karbon.markdown
-import com.thebrownfoxx.karbon.print
+import com.thebrownfoxx.karbon14.ConsoleTreePrinter
+import com.thebrownfoxx.karbon14.FilePrinter
+import com.thebrownfoxx.karbon14.Kotlin
+import com.thebrownfoxx.karbon14.Markdown
+import com.thebrownfoxx.karbon14.https
+import com.thebrownfoxx.karbon14.markdown
+import com.thebrownfoxx.karbon14.print
 import java.io.File
 
 fun generateReadme() {
@@ -11,7 +14,10 @@ fun generateReadme() {
         description()
         feedback()
         usage()
-    }.print(FilePrinter(File("../README.md")))
+    }.print(
+        ConsoleTreePrinter,
+        FilePrinter(File("../README.md")),
+    )
 }
 
 private fun Markdown.description() {
@@ -22,9 +28,9 @@ private fun Markdown.description() {
 
 private fun Markdown.feedback() {
     h2("Community")
-    paragraph {
+    block {
         text("This library is still early in development. Feedback can be submitted through ")
-        link("https://github.com/thebrownfoxx/karbon/issues", "GitHub Issues")
+        link(https("github.com/thebrownfoxx/karbon/issues"), "GitHub Issues")
         text(". Open-source contributions are very welcome, ")
         text("especially implementations of other Markdown features and flavors.")
     }
@@ -41,12 +47,13 @@ private fun Markdown.usage() {
 }
 
 private fun Markdown.dependency() {
-    paragraph {
+    block {
         text("Add it as a dependency to your project, hosted in ")
-        val mavenCentralUri = "https://central.sonatype.com/artifact/com.thebrownfoxx/karbon"
+        val mavenCentralUri = https("central.sonatype.com/artifact/com.thebrownfoxx/karbon")
         link(mavenCentralUri, "Maven Central")
         text(".")
     }
+    whitespace()
     dependencyCode(Config.version)
     whitespace()
 }
@@ -63,11 +70,12 @@ private fun Markdown.dependencyCode(version: String) {
 
 private fun Markdown.entryPoint() {
     h3("Entry Point")
-    paragraph {
+    block {
         text("You can start writing your Karbon Markdown inside a ")
-        code("markdown")
+        inlineCode("markdown")
         text(" block.")
     }
+    whitespace()
     entryPointCode()
 }
 
@@ -90,6 +98,7 @@ private fun Markdown.entryPointCode() {
 private fun Markdown.kotlinFeatures() {
     h3("Kotlin features")
     p("You can use all your standard Kotlin features to build your Markdown.")
+    whitespace()
     kotlinFeaturesCode()
     whitespace()
 }
@@ -108,11 +117,12 @@ private fun Markdown.kotlinFeaturesCode() {
 
 private fun Markdown.composingMarkdown() {
     h3("Composing Markdown")
-    paragraph {
+    block {
         text("You can break Markdown into smaller composable functions via extension functions for the ")
-        code("Markdown")
+        inlineCode("Markdown")
         text(" interface.")
     }
+    whitespace()
     composingMarkdownCode()
     whitespace()
 }
@@ -141,23 +151,25 @@ private fun Markdown.composingMarkdownCode() {
 
 private fun Markdown.printingMarkdown() {
     h3("Printing Markdown")
-    paragraph {
+    block {
         text("You can print the Markdown you wrote with the print function, which accepts ")
-        code("MarkdownPrinter")
+        inlineCode("MarkdownPrinter")
         text("s. There are prebuilt printers included in this library including ")
-        code("ConsolePrinter")
+        inlineCode("ConsolePrinter")
         text(" and ")
-        code("FilePrinter")
+        inlineCode("FilePrinter")
         text(". You can also extend the ")
-        code("MarkdownPrinter")
+        inlineCode("MarkdownPrinter")
         text(" interface to make your own.")
     }
+    whitespace()
     printingMarkdownCode()
-    paragraph {
+    whitespace()
+    block {
         text("Alternatively, you can access the ")
-        code("value")
-        text("property of a ")
-        code("Markdown")
+        inlineCode("value")
+        text(" property of a ")
+        inlineCode("Markdown")
         text(" instance to get the raw Markdown String.")
     }
 }
@@ -173,5 +185,5 @@ private fun Markdown.printingMarkdownCode() {
 }
 
 private fun Markdown.kotlin(code: String) {
-    code("kotlin", code)
+    blockCode(Kotlin, code)
 }

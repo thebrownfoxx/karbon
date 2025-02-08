@@ -27,7 +27,7 @@ public data object ParagraphBreakNode : InlineNode {
 }
 
 public data class LinkNode(
-    val uri: String,
+    val uri: Uri,
     override val children: List<InlineNode>,
 ) : InternalNode, InlineNode {
     override fun toTreeBranchString(): String = "Link($uri)"
@@ -50,10 +50,14 @@ public data class InlineCodeNode(val content: String) : InlineNode {
 }
 
 public data class ImageNode(
-    val uri: String,
+    val uri: Uri,
     val altText: String,
 ) : InlineNode {
     override fun toTreeBranchString(): String = "Image($uri, $altText)"
+}
+
+public data class BlockNode(override val children: List<InlineNode>) : InternalNode {
+    override fun toTreeBranchString(): String = "Block"
 }
 
 public data class HeadingNode(
@@ -71,7 +75,14 @@ public data class BlockCodeNode(
     val language: CodeLanguage?,
     val content: String,
 ) : Node {
-    override fun toTreeBranchString(): String = "BlockCode(language=${language?.name}, $content)"
+    override fun toTreeBranchString(): String {
+        val singleLineContent = content.split("\n").joinToString(" ") { it.trim() }
+        return "BlockCode(language=${language?.name}, $singleLineContent)"
+    }
+}
+
+public data object WhitespaceNode : Node {
+    override fun toTreeBranchString(): String = "Whitespace"
 }
 
 public data object HorizontalRuleNode : Node {
