@@ -19,4 +19,5 @@ dependencyResolutionManagement {
 
 rootProject.name = "karbon-dsl"
 include(":karbon")
+include(":karbon-14")
 include(":docs")
