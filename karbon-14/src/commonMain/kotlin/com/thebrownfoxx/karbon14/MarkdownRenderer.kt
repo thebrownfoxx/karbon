@@ -1,9 +1,9 @@
 package com.thebrownfoxx.karbon14
 
 public fun interface MarkdownRenderer {
-    public fun render(markdown: Markdown): String
+    public fun render(root: RootNode): String
 }
 
-public fun Markdown.render(renderer: MarkdownRenderer = CommonMarkRenderer()): String {
-    return renderer.render(this)
+public fun Markdown.render(renderer: MarkdownRenderer = DefaultMarkdownRenderer()): String {
+    return renderer.render(root)
 }

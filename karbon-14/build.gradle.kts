@@ -38,6 +38,9 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {}
+        jvmMain.dependencies {
+            implementation(libs.jetbrains.markdown)
+        }
     }
 }
 

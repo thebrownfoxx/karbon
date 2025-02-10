@@ -4,9 +4,9 @@ import java.io.File
 
 public class FilePrinter(
     public val file: File,
-    public val renderer: MarkdownRenderer = CommonMarkRenderer(),
+    public val renderer: MarkdownRenderer = DefaultMarkdownRenderer(),
 ) : MarkdownPrinter {
-    override fun print(markdown: Markdown) {
-        file.writeText(markdown.render(renderer))
+    override fun print(root: RootNode) {
+        file.writeText(renderer.render(root))
     }
 }

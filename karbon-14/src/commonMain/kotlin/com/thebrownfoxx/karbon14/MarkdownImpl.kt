@@ -12,10 +12,6 @@ public class InlineMarkdownImpl : InlineMarkdown {
         _content.add(LineBreakNode)
     }
 
-    override fun paragraphBreak() {
-        _content.add(ParagraphBreakNode)
-    }
-
     override fun link(uri: Uri, content: InlineMarkdown.() -> Unit) {
         _content.add(LinkNode(uri, getContentChildren(content)))
     }
@@ -42,24 +38,24 @@ public class InlineMarkdownImpl : InlineMarkdown {
 }
 
 public class MarkdownImpl : Markdown {
-    private val nodes = mutableListOf<Node>()
+    private val nodes = mutableListOf<BlockNode>()
 
     override val root: RootNode
         get() = RootNode(nodes)
 
-    override fun block(content: InlineMarkdown.() -> Unit) {
-        nodes.add(BlockNode(getContentChildren(content)))
+    override fun blockQuote(content: Markdown.() -> Unit) {
+        nodes.add(BlockQuoteNode(MarkdownImpl().apply(content).nodes))
     }
 
-    override fun heading(
-        level: HeadingLevel,
+    override fun paragraph(content: InlineMarkdown.() -> Unit) {
+        nodes.add(ParagraphNode(getContentChildren(content)))
+    }
+
+    override fun header(
+        level: HeaderLevel,
         content: InlineMarkdown.() -> Unit,
     ) {
-        nodes.add(HeadingNode(level, getContentChildren(content)))
-    }
-
-    override fun blockQuote(content: InlineMarkdown.() -> Unit) {
-        nodes.add(BlockQuoteNode(getContentChildren(content)))
+        nodes.add(HeaderNode(level, getContentChildren(content)))
     }
 
     override fun blockCode(language: CodeLanguage?, content: String) {

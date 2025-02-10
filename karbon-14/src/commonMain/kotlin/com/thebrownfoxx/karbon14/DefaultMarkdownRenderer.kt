@@ -1,10 +1,12 @@
 package com.thebrownfoxx.karbon14
 
-public class CommonMarkRenderer(
+import kotlin.jvm.JvmName
+
+public class DefaultMarkdownRenderer(
     private val markdownInTextNodeStrategy: MarkdownInTextNodeStrategy = IgnoreMarkdownInTextNodeStrategy,
 ) : MarkdownRenderer {
-    override fun render(markdown: Markdown): String {
-        return markdown.root.render()
+    override fun render(root: RootNode): String {
+        return root.render()
     }
 
     private fun Node.render(): String {
@@ -12,16 +14,15 @@ public class CommonMarkRenderer(
             is RootNode -> render()
             is TextNode -> render()
             is LineBreakNode -> render()
-            is ParagraphBreakNode -> render()
             is LinkNode -> render()
             is BoldNode -> render()
             is ItalicNode -> render()
             is StrikethroughNode -> render()
             is InlineCodeNode -> render()
             is ImageNode -> render()
-            is BlockNode -> render()
-            is HeadingNode -> render()
             is BlockQuoteNode -> render()
+            is ParagraphNode -> render()
+            is HeaderNode -> render()
             is BlockCodeNode -> render()
             is WhitespaceNode -> render()
             is HorizontalRuleNode -> render()
@@ -29,6 +30,7 @@ public class CommonMarkRenderer(
         }
     }
 
+    @JvmName("renderRootNode")
     private fun RootNode.render(): String {
         return children.joinToString("\n") { it.render() }
     }
@@ -39,10 +41,6 @@ public class CommonMarkRenderer(
 
     private fun LineBreakNode.render(): String {
         return "  \n"
-    }
-
-    private fun ParagraphBreakNode.render(): String {
-        return "\n\n"
     }
 
     private fun LinkNode.render(): String {
@@ -69,19 +67,19 @@ public class CommonMarkRenderer(
         return "![$altText](${uri.value})"
     }
 
-    private fun BlockNode.render(): String {
-        return renderedContent
-    }
-
-    private fun HeadingNode.render(): String {
-        val hashes = "#".repeat(level.value)
-        return "$hashes $renderedContent"
-    }
-
     private fun BlockQuoteNode.render(): String {
         val lines = renderedContent.split("\n")
         val decoratedLines =  lines.map { "> $it" }
         return decoratedLines.joinToString("\n")
+    }
+
+    private fun ParagraphNode.render(): String {
+        return renderedContent
+    }
+
+    private fun HeaderNode.render(): String {
+        val hashes = "#".repeat(level.value)
+        return "$hashes $renderedContent"
     }
 
     private fun BlockCodeNode.render(): String {
