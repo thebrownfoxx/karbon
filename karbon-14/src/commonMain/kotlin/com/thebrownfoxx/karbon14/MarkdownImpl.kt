@@ -1,8 +1,11 @@
 package com.thebrownfoxx.karbon14
 
+import com.thebrownfoxx.karbon14.list.MarkdownList
+import com.thebrownfoxx.karbon14.list.MarkdownListImpl
+
 public class InlineMarkdownImpl : InlineMarkdown {
     private val _content = mutableListOf<InlineNode>()
-    public val content: List<InlineNode> get() = _content.toList()
+    override val content: List<InlineNode> get() = _content.toList()
 
     override fun text(value: String) {
         _content.add(TextNode(value))
@@ -68,6 +71,17 @@ public class MarkdownImpl : Markdown {
 
     override fun whitespace() {
         nodes.add(WhitespaceNode)
+    }
+
+    override fun unorderedList(content: MarkdownList.() -> Unit) {
+        nodes.add(MarkdownListImpl(null).apply(content).node)
+    }
+
+    override fun orderedList(
+        startingIndex: Int,
+        content: MarkdownList.() -> Unit,
+    ) {
+        nodes.add(MarkdownListImpl(startingIndex).apply(content).node)
     }
 }
 

@@ -1,6 +1,10 @@
 package com.thebrownfoxx.karbon14
 
+import com.thebrownfoxx.karbon14.list.MarkdownList
+
 public interface InlineMarkdown {
+    public val content: List<InlineNode>
+
     public fun text(value: String)
     public fun lineBreak()
     public fun link(uri: Uri, content: InlineMarkdown.() -> Unit)
@@ -25,7 +29,12 @@ public interface Markdown {
     public fun horizontalRule()
     public fun whitespace()
 
+    public fun unorderedList(content: MarkdownList.() -> Unit)
+    public fun orderedList(startingIndex: Int, content: MarkdownList.() -> Unit)
+
     public fun paragraph(text: String): Unit = paragraph { text(text) }
+    public fun p(content: InlineMarkdown.() -> Unit): Unit = paragraph(content)
+    public fun p(text: String): Unit = paragraph(text)
     public fun h1(content: InlineMarkdown.() -> Unit): Unit = header(1.headerLevel, content)
     public fun h2(content: InlineMarkdown.() -> Unit): Unit = header(2.headerLevel, content)
     public fun h3(content: InlineMarkdown.() -> Unit): Unit = header(3.headerLevel, content)
@@ -39,6 +48,10 @@ public interface Markdown {
     public fun h5(text: String): Unit = h5 { text(text) }
     public fun h6(text: String): Unit = h6 { text(text) }
     public fun blockCode(content: String): Unit = blockCode(null, content)
+
+    public fun ul(content: MarkdownList.() -> Unit): Unit = unorderedList(content)
+    public fun ol(startingIndex: Int = 1, content: MarkdownList.() -> Unit): Unit =
+        orderedList(startingIndex, content)
 }
 
 public fun <T : Markdown> markdown(

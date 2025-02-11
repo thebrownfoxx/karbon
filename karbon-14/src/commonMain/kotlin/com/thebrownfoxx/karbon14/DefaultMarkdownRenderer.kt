@@ -1,5 +1,6 @@
 package com.thebrownfoxx.karbon14
 
+import com.thebrownfoxx.karbon14.list.*
 import kotlin.jvm.JvmName
 
 public class DefaultMarkdownRenderer(
@@ -26,6 +27,7 @@ public class DefaultMarkdownRenderer(
             is BlockCodeNode -> render()
             is WhitespaceNode -> render()
             is HorizontalRuleNode -> render()
+            is ListNode -> render()
             else -> error("Unsupported node $this")
         }
     }
@@ -69,7 +71,7 @@ public class DefaultMarkdownRenderer(
 
     private fun BlockQuoteNode.render(): String {
         val lines = renderedContent.split("\n")
-        val decoratedLines =  lines.map { "> $it" }
+        val decoratedLines = lines.map { "> $it" }
         return decoratedLines.joinToString("\n")
     }
 
@@ -93,6 +95,54 @@ public class DefaultMarkdownRenderer(
 
     private fun HorizontalRuleNode.render(): String {
         return "___"
+    }
+
+    private fun ListNode.render(indents: Int = 0): String {
+        return when (this) {
+            is UnorderedListNode -> children.emitUnorderedList(indents)
+            is OrderedListNode -> children.emitOrderedList(startingIndex, indents)
+        }
+    }
+
+    private fun List<ListElementNode>.emitUnorderedList(indents: Int): String {
+        return joinToString("\n") { item ->
+            when (item) {
+                is ListItemNode -> item.renderUnordered(indents)
+                is SubListNode -> item.list.render(indents + 2)
+            }
+        }
+    }
+
+    private fun ListItemNode.renderUnordered(indents: Int): String {
+        val indent = " ".repeat(indents)
+        return "$indent- $renderedContent"
+    }
+
+    private fun List<ListElementNode>.emitOrderedList(startingIndex: Int, indents: Int): String {
+        var previousIndex = 0
+        return joinToString("\n") { item ->
+            when (item) {
+                is ListItemNode -> item.renderOrdered(startingIndex, indents, this) { previousIndex = it }
+                is SubListNode -> item.list.render(indents + previousIndex.toString().length + 2)
+            }
+        }
+    }
+
+    private fun ListItemNode.renderOrdered(
+        startingIndex: Int,
+        indents: Int,
+        list: List<ListElementNode>,
+        updatePreviousIndex: (Int) -> Unit,
+    ): String {
+        val index = list.filterIsInstance<ListItemNode>().indexOf(this)
+        val indexToShow = startingIndex + index
+        updatePreviousIndex(index)
+        return renderOrdered(indexToShow, indents)
+    }
+
+    private fun ListItemNode.renderOrdered(index: Int, indents: Int): String {
+        val indent = " ".repeat(indents)
+        return "$indent$index. $renderedContent"
     }
 
     private val InternalNode.renderedContent

@@ -74,7 +74,7 @@ public data class ImageNode(
 
 public interface BlockNode : Node
 
-public data class BlockQuoteNode(override val children: List<Node>) : InternalNode, BlockNode {
+public data class BlockQuoteNode(override val children: List<BlockNode>) : InternalNode, BlockNode {
     override fun toTreeBranchString(): String = "BlockQuote"
 
     public operator fun plus(other: BlockQuoteNode): BlockQuoteNode {
